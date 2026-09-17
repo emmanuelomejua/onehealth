@@ -5,17 +5,19 @@ import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
 
 
-function AppLayout(){
-  return(
-    <main className="">
-        <Topbar/>
-        <div className="flex items-center justify-center w-full max-w-350 min-h-screen bg-white">
-                <Sidebar/>
-            <div className="flex flex-col">
-                <Outlet/>
-            </div>
+function AppLayout() {
+  return (
+    <main className="flex flex-col min-h-screen">
+      <Topbar />
+      <div className="flex flex-1 items-center justify-center w-full mx-auto max-w-[1400px] bg-white">
+        <div className="flex">
+          <Sidebar />
+          <div className="flex flex-col">
+            <Outlet />
+          </div>
         </div>
-        <Footer/>
+      </div>
+      <Footer />
     </main>
   )
 }

@@ -137,7 +137,7 @@ const Sidebar = () => {
         type="button"
         onClick={() => setIsMobileOpen(true)}
         aria-label="Open navigation"
-        className="fixed left-4 top-4 z-30 flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
+        className="z-30 flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
       >
         <Menu className="h-5 w-5" />
       </button>
