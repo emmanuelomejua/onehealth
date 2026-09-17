@@ -224,8 +224,8 @@ const Overview: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#eef4f1] text-[#16211d] font-sans">
-      <main className="mx-auto flex max-w-[1280px] flex-col gap-6 px-8 py-7">
+    <div className="bg-[#eef4f1] text-[#16211d] font-sans">
+      <main className="mx-auto flex flex-col gap-6 px-8 py-7">
         {/* Patient summary card */}
         <section className="flex flex-wrap items-start justify-between gap-6 rounded-2xl border border-gray-200 bg-white p-6">
           <div className="flex gap-4">
@@ -431,23 +431,6 @@ const Overview: React.FC = () => {
           </div>
         </section>
       </main>
-
-      <footer className="flex flex-wrap items-center justify-between gap-2.5 border-t border-gray-200 px-8 py-5">
-        <span className="text-[13px] text-gray-500">
-          © 2025 OneHealth Decentralized Patient Records. All rights reserved.
-        </span>
-        <div className="flex gap-5">
-          <a href="#" className="text-[13px] text-gray-500 hover:text-[#16211d]">
-            Privacy Protocol
-          </a>
-          <a href="#" className="text-[13px] text-gray-500 hover:text-[#16211d]">
-            Terms of Vault
-          </a>
-          <a href="#" className="text-[13px] text-gray-500 hover:text-[#16211d]">
-            Security Audit
-          </a>
-        </div>
-      </footer>
     </div>
   );
 };

@@ -1,15 +1,21 @@
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import Topbar from "../components/Topbar";
-import { LoginPage, Overview, RegistrationPage } from "../pages";
+import { AccessPermissions, AuditLogs, LoginPage, Overview, Records, RegistrationPage } from "../pages";
+import Footer from "../components/Footer";
+import Sidebar from "../components/Sidebar";
 
 
 function AppLayout(){
   return(
     <main className="">
         <Topbar/>
-        <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 bg-white">
-        <Outlet/>
+        <div className="flex items-center justify-center w-full max-w-350 min-h-screen bg-white">
+                <Sidebar/>
+            <div className="flex flex-col">
+                <Outlet/>
+            </div>
         </div>
+        <Footer/>
     </main>
   )
 }
@@ -24,6 +30,18 @@ const router = createBrowserRouter([
       path: '/',
       element: <Overview/>
       },
+      {
+      path: '/records',
+      element: <Records/>
+      },
+      {
+      path: '/access-permissions',
+      element: <AccessPermissions/>
+      },
+      {
+      path: '/audit-logs',
+      element: <AuditLogs/>
+      },
     ]
   },
   {
@@ -37,7 +55,6 @@ const router = createBrowserRouter([
 ])
 
 const Routes = () => {
-
     
   return (
     <RouterProvider router={router} />
