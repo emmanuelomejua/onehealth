@@ -1,12 +1,18 @@
-
+import Routes from "./routes/Routes"
+import { Toaster } from 'sonner';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 function App() {
 
+  const queryClient = new QueryClient()
 
   return (
-    <div className="flex flex-1 flex-col h-screen gap-6 bg-black">
-      <p className='text-white'>Hey guys</p>
-    </div>
+    <main>
+      <QueryClientProvider client={queryClient}>
+        <Routes/>
+        <Toaster position="top-center"/>
+      </QueryClientProvider>
+    </main>
   )
 }
 
