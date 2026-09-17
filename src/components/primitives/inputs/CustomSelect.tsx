@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils';
 import React, { type FC } from 'react';
+import { cn } from '../../../lib/utils';
 
 export interface Option {
     value: string
