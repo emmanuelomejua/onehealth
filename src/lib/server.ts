@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create a dedicated instance instead of configuring the global axios object
 const SERVER = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL || 'https://api.example.com',
+  baseURL: 'https://api.example.com',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -12,7 +12,7 @@ const SERVER = axios.create({
 // --- Helpers for token storage ---
 const getAccessToken = () => localStorage.getItem('accessToken');
 const getRefreshToken = () => localStorage.getItem('refreshToken');
-const setAccessToken = (token) => localStorage.setItem('accessToken', token);
+const setAccessToken = (token: string) => localStorage.setItem('accessToken', token);
 const clearTokens = () => {
   localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');
@@ -49,9 +49,9 @@ SERVER.interceptors.request.use(
 // Handles 401/403 responses, attempts a token refresh once,
 // and blocks/retries requests accordingly.
 let isRefreshing = false;
-let failedQueue = [];
+let failedQueue = [] as any[];
 
-const processQueue = (error, token = null) => {
+const processQueue = (error: any, token = null) => {
   failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error);
@@ -80,7 +80,7 @@ SERVER.interceptors.response.use(
         })
           .then((token) => {
             originalRequest.headers.Authorization = `Bearer ${token}`;
-            return api(originalRequest);
+            return SERVER(originalRequest);
           })
           .catch((err) => Promise.reject(err));
       }
@@ -93,16 +93,16 @@ SERVER.interceptors.response.use(
         if (!refreshToken) throw new Error('No refresh token available');
 
         const { data } = await axios.post(
-          `${api.defaults.baseURL}/auth/refresh`,
+          `${SERVER.defaults.baseURL}/auth/refresh`,
           { refreshToken }
         );
 
         setAccessToken(data.accessToken);
-        api.defaults.headers.common.Authorization = `Bearer ${data.accessToken}`;
+        SERVER.defaults.headers.common.Authorization = `Bearer ${data.accessToken}`;
         processQueue(null, data.accessToken);
 
         originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
-        return api(originalRequest);
+        return SERVER(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
         clearTokens();
