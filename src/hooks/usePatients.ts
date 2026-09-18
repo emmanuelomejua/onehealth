@@ -1,7 +1,8 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import type { PatientOnboardingPayload, PatientOnboardingResponse } from '../types/types';
+import type { AddRecordPayload, MedicalRecord, PatientOnboardingPayload, PatientOnboardingResponse } from '../types/types';
 import { registerPatient } from '../lib/api/hospitals';
+import { addMedicalRecord } from '../lib/api/patients';
 
 export const usePatientOnboarding = () => {
   return useMutation<PatientOnboardingResponse, AxiosError, PatientOnboardingPayload>({
@@ -19,3 +20,15 @@ export const usePatientOnboarding = () => {
   });
 };
 
+export const medicalRecordsQueryKey = ['medical-records', 'me'];
+
+export const useAddMedicalRecord = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<MedicalRecord, AxiosError, AddRecordPayload>({
+    mutationFn: addMedicalRecord,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: medicalRecordsQueryKey });
+    },
+  });
+};

@@ -122,3 +122,13 @@ export interface AuditLogEntry {
   tokenStatus: { text: string; tone: 'active' | 'expired' };
   action: 'revoke' | 'closed';
 }
+
+export interface AddRecordPayload {
+  entry_type: string;
+  description: string;
+}
+
+export interface MedicalRecord extends AddRecordPayload {
+  id: string;
+  created_at?: string;
+}
