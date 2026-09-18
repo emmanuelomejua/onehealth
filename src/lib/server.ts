@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create a dedicated instance instead of configuring the global axios object
 const SERVER = axios.create({
-  baseURL: 'https://api.example.com',
+  baseURL: 'https://onehealth-api-nsmh.onrender.com/?format=openapi/api/v1',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -26,8 +26,8 @@ SERVER.interceptors.request.use(
     const token = getAccessToken();
 
     // Allow certain public endpoints to skip the auth check
-    const isPublicEndpoint = config.url?.includes('/auth/login') ||
-                              config.url?.includes('/auth/register');
+    const isPublicEndpoint = config.url?.includes('/sign-in') ||
+                              config.url?.includes('/sign-up');
 
     if (!token && !isPublicEndpoint) {
       // Reject before the request is even sent

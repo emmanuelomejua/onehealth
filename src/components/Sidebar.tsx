@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  Activity,
   Bell,
   ChevronLeft,
   ChevronRight,
@@ -30,6 +31,12 @@ const navItems: NavItem[] = [
     href: '/',
     icon: LayoutDashboard,
     description: 'Overview and activity',
+  },
+  {
+    label: 'Verified Hospitals',
+    href: '/hospitals',
+    icon: ClipboardList,
+    description: 'Access all verified hospitals',
   },
   {
     label: 'Records',
