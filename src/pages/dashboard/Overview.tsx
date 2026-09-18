@@ -1,67 +1,11 @@
-import React from 'react';
-
-// ---------- Types ----------
-
-interface PatientInfo {
-  name: string;
-  dob: string;
-  age: number;
-  bloodType: string;
-  vaultAddress: string;
-  blockNumber: string;
-  photoUrl?: string;
-}
-
-type BadgeTone = 'verified' | 'managed' | 'active' | 'expired' | 'realtime';
-
-interface VitalStat {
-  id: string;
-  icon: React.ReactNode;
-  label: string;
-  sublabel: string;
-  badge: { text: string; tone: BadgeTone };
-  value: string;
-  unit?: string;
-  detail: string;
-  meta: string;
-  linkText: string;
-  metaTone?: 'default' | 'success';
-}
-
-interface AuditLogEntry {
-  id: string;
-  initials: string;
-  accessor: string;
-  provider: string;
-  recordAccessed: string;
-  timestamp: string;
-  tokenStatus: { text: string; tone: 'active' | 'expired' };
-  action: 'revoke' | 'closed';
-}
+import React, { useState } from 'react';
+import { badgeToneClasses } from '../../helpers/funcs';
+import type { AuditLogEntry, PatientInfo } from '../../types/types';
+import { vitalStats } from '../../data/data';
+import Button from '../../components/primitives/buttons/Button';
+import AddRecordModal from '../../modals/AddRecordModal';
 
 // ---------- Icons (inline, no external deps) ----------
-
-const HeartIcon = () => (
-  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z" />
-  </svg>
-);
-
-const ShieldIcon = () => (
-  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M12 2 4 5v6c0 5 3.4 9 8 11 4.6-2 8-6 8-11V5l-8-3Z" />
-  </svg>
-);
-
-const FlaskIcon = () => (
-  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M9 2v6.3L4.3 18a2 2 0 0 0 1.8 3h11.8a2 2 0 0 0 1.8-3L15 8.3V2" />
-    <path d="M9 2h6" />
-    <path d="M7.5 14h9" />
-  </svg>
-);
-
-
 const LockIcon = () => (
   <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2">
     <rect x="4" y="10" width="16" height="10" rx="2" />
@@ -77,14 +21,14 @@ const LinkIcon = () => (
   </svg>
 );
 
-const QrIcon = () => (
-  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="3" y="3" width="7" height="7" />
-    <rect x="14" y="3" width="7" height="7" />
-    <rect x="3" y="14" width="7" height="7" />
-    <path d="M14 14h3v3h-3zM19 14h2M14 19h2M19 19h2" />
-  </svg>
-);
+// const QrIcon = () => (
+//   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
+//     <rect x="3" y="3" width="7" height="7" />
+//     <rect x="14" y="3" width="7" height="7" />
+//     <rect x="3" y="14" width="7" height="7" />
+//     <path d="M14 14h3v3h-3zM19 14h2M14 19h2M19 19h2" />
+//   </svg>
+// );
 
 const PlusIcon = () => (
   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
@@ -123,43 +67,7 @@ const patient: PatientInfo = {
   blockNumber: '#18,492,031',
 };
 
-const vitalStats: VitalStat[] = [
-  {
-    id: 'vitals',
-    icon: <HeartIcon />,
-    label: 'Vitals',
-    sublabel: 'Latest measurement',
-    badge: { text: 'Verified', tone: 'verified' },
-    value: '120/80',
-    unit: 'mmHg',
-    detail: 'Blood Pressure • Heart Rate: 72 bpm',
-    meta: 'Recorded 2 hours ago',
-    linkText: 'History',
-  },
-  {
-    id: 'conditions',
-    icon: <ShieldIcon />,
-    label: 'Active Conditions',
-    sublabel: 'Managed diagnoses',
-    badge: { text: 'Managed', tone: 'managed' },
-    value: 'Type 2 Diabetes',
-    detail: 'Stable regimen • Diet & Metformin 500mg',
-    meta: 'Diagnosed Jan 2021',
-    linkText: 'Details',
-  },
-  {
-    id: 'labs',
-    icon: <FlaskIcon />,
-    label: 'Lab Results',
-    sublabel: 'Pathology report',
-    badge: { text: 'Doctor Verified', tone: 'verified' },
-    value: 'HbA1c 6.8%',
-    detail: 'Target achieved (< 7.0%) • Panel #9821',
-    meta: 'Yesterday, 09:30 AM',
-    linkText: 'View PDF',
-    metaTone: 'success',
-  },
-];
+
 
 const auditLog: AuditLogEntry[] = [
   {
@@ -195,21 +103,11 @@ const auditLog: AuditLogEntry[] = [
 ];
 
 
-
-
-// ---------- Badge tone -> Tailwind classes ----------
-
-const badgeToneClasses: Record<BadgeTone, string> = {
-  verified: 'bg-emerald-50 text-emerald-700',
-  managed: 'bg-emerald-50 text-emerald-700',
-  active: 'bg-emerald-50 text-emerald-700',
-  expired: 'bg-gray-100 text-gray-500',
-  realtime: 'bg-teal-100 text-teal-900',
-};
-
 // ---------- Component ----------
 
 const Overview: React.FC = () => {
+
+  const [addRecords, setAddRecords] = useState(false);
 
 
   const handleRevoke = (entry: AuditLogEntry) => {
@@ -258,18 +156,21 @@ const Overview: React.FC = () => {
           </div>
 
           <div className="flex shrink-0 gap-3">
-            <button
+            {/* <Button
               type="button"
+              startIcon={<QrIcon /> }
               className="inline-flex items-center gap-2 rounded-[10px] border border-gray-200 bg-white px-4 py-2.5 text-[13px] font-semibold hover:bg-[#eef4f1]"
             >
-              <QrIcon /> Share Access Token
-            </button>
-            <button
+              Share Access Token
+            </Button> */}
+            <Button
               type="button"
-              className="inline-flex items-center gap-2 rounded-[10px] bg-teal-900 px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-teal-950"
+              endIcon={<PlusIcon /> }
+              onClick={() => setAddRecords(true)}
+              className="rounded-[10px] bg-teal-900 px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-teal-950"
             >
-              <PlusIcon /> Add Record
-            </button>
+              Add Record
+            </Button>
           </div>
         </section>
 
@@ -425,6 +326,8 @@ const Overview: React.FC = () => {
           </div>
         </section>
       </main>
+
+      <AddRecordModal open={addRecords} setOpen={setAddRecords}/>
     </div>
   );
 };

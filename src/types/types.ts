@@ -1,3 +1,4 @@
+export type BadgeTone = 'verified' | 'managed' | 'active' | 'expired' | 'realtime';
 
 export interface UIProps {
   children: React.ReactNode;
@@ -83,4 +84,41 @@ export interface StaffOnboardingPayload {
 export interface StaffOnboardingResponse extends StaffMember {
   email: string;
   professional_license_number: string;
+}
+
+
+export interface PatientInfo {
+  name: string;
+  dob: string;
+  age: number;
+  bloodType: string;
+  vaultAddress: string;
+  blockNumber: string;
+  photoUrl?: string;
+}
+
+
+export interface VitalStat {
+  id: string;
+  icon: any;
+  label: string;
+  sublabel: string;
+  badge: { text: string; tone: BadgeTone };
+  value: string;
+  unit?: string;
+  detail: string;
+  meta: string;
+  linkText: string;
+  metaTone?: 'default' | 'success';
+}
+
+export interface AuditLogEntry {
+  id: string;
+  initials: string;
+  accessor: string;
+  provider: string;
+  recordAccessed: string;
+  timestamp: string;
+  tokenStatus: { text: string; tone: 'active' | 'expired' };
+  action: 'revoke' | 'closed';
 }
